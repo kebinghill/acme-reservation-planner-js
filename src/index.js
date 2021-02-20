@@ -1,8 +1,8 @@
-import axios from 'axios';
+import axios from "axios";
 
-const userList = document.querySelector('#user-list');
-const restaurantList = document.querySelector('#restaurant-list');
-const reservationList = document.querySelector('#reservation-list');
+const userList = document.querySelector("#user-list");
+const restaurantList = document.querySelector("#restaurant-list");
+const reservationList = document.querySelector("#reservation-list");
 
 const renderUsers = (users) => {
   const html = users
@@ -10,11 +10,11 @@ const renderUsers = (users) => {
       (user) =>
         `
     <li>
-      ${user.name}
+      <a href ='#${user.id}'>${user.name}</a>
     </li>
   `
     )
-    .join('');
+    .join("");
   userList.innerHTML = html;
 };
 
@@ -28,16 +28,33 @@ const renderRestaurants = (restaurants) => {
     </li>
   `
     )
-    .join('');
+    .join("");
   restaurantList.innerHTML = html;
+};
+
+const renderReservation = (reservations) => {
+  const html = reservations
+    .map(
+      (reservation) =>
+        `
+    <li>
+      ${reservation.restaurant.name}
+    </li>
+  `
+    )
+    .join("");
+  reservationtList.innerHTML = html;
 };
 
 const init = async () => {
   try {
-    const users = (await axios.get('/api/users')).data;
+    const users = (await axios.get("/api/users")).data;
     renderUsers(users);
-    const restaurants = (await axios.get('/api/restaurants')).data;
+    const restaurants = (await axios.get("/api/restaurants")).data;
     renderRestaurants(restaurants);
+    const reservations = (await axios.get("/api/users/:userId/reservations"))
+      .data;
+    renderReservation(reservations);
   } catch (error) {
     console.log(error);
   }
